@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ryan's Christmas Wishlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: warm, festive, uncluttered — a family gift list, not a store
+   IDEA: a gift tag tied to wrapped presents; each item card is a tag on the tree
+   PICTURE: a drawn stack of wrapped gifts under falling snow in the evergreen header
+   COLOUR and TYPE: evergreen ground, snow white, cranberry accent; Young Serif titles, Figtree body
+   LAYOUT: full-width evergreen header with title + picture, sticky sort/filter bar, responsive card grid */
+:root{color-scheme:light dark;
+  --bg:light-dark(#ffffff,#0e1512);--ink:light-dark(#14231d,#eef3ef);--muted:light-dark(#5a6b63,#a5b4ac);
+  --pine:#0f3b2c;--pine2:#174d3a;--berry:#b8202e;--berry-ink:light-dark(#a01b28,#ff7d86);--snow:#f7f5ef;--gold:#e4b75c;
+  --card:light-dark(#ffffff,#16211c);--line:light-dark(#e3e8e4,#26332d);--chip:light-dark(#f1f4f2,#1d2a24);--img:#ffffff}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+
+header{background:var(--pine);color:var(--snow);position:relative;overflow:hidden}
+header .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center}
+h1{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:clamp(36px,5.4vw,60px);line-height:1.05;margin:0 0 14px;text-wrap:balance}
+.lede{font-size:17px;max-width:46ch;margin:0 0 22px;color:#d8e6dd}
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 14px;font-size:14px;white-space:nowrap}
+.stat b{color:var(--gold);font-weight:700}
+.art{position:relative;aspect-ratio:5/4;width:100%;max-width:520px;justify-self:end}
+.art svg{position:absolute;inset:0;width:100%;height:100%}
+.snow circle{fill:#fff;opacity:.75;animation:fall linear infinite}
+@keyframes fall{from{transform:translateY(-20px)}to{transform:translateY(420px)}}
+@media(prefers-reduced-motion:reduce){.snow circle{animation:none}}
+
+.bar{background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:14px max(5vw,16px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 520px}
+.chip{font:600 14px/1 Figtree,sans-serif;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer;white-space:nowrap}
+.chip span{color:var(--muted);font-weight:500;margin-left:4px}
+.chip[aria-pressed=true]{background:var(--berry);border-color:var(--berry);color:#fff}
+.chip[aria-pressed=true] span{color:#ffd9dc}
+.chip:focus-visible,select:focus-visible,.buy:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.sort{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+select{font:500 16px Figtree,sans-serif;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+
+@media(min-width:900px){.bar{position:sticky;top:0;z-index:5}}
+main .wrap{padding-top:28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,232px),1fr));gap:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,59,44,.14)}
+.pic{display:block;background:var(--img);aspect-ratio:1;border-bottom:1px solid var(--line)}
+.pic img{width:100%;height:100%;object-fit:contain;display:block}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.cat{font-size:13px;font-weight:600;color:var(--berry-ink)}
+.name{font-family:"Young Serif",Georgia,serif;font-size:19px;line-height:1.2;margin:0}
+.detail{font-size:14px;color:var(--muted);margin:0}
+.foot{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.price{font-weight:700;font-size:20px;white-space:nowrap}
+.price small{display:block;font-size:13px;font-weight:500;color:var(--muted)}
+.buy{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:10px;background:var(--pine);color:#fff;text-decoration:none;font-weight:600;font-size:14px;white-space:nowrap}
+.buy:hover{background:var(--pine2)}
+:root[data-theme=dark] .buy{background:#2a6b52}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .buy{background:#2a6b52}}
+.empty{padding:40px 0;color:var(--muted)}
+footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);margin-top:40px}
+
+@media(max-width:600px){
+  header .wrap{grid-template-columns:1fr}
+  .art{justify-self:center;max-width:360px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;flex:1 1 100%;margin:0 calc(-1 * max(5vw,16px));padding:2px max(5vw,16px) 6px;scrollbar-width:none}
+  .chip{flex:none}
+  .sort{width:100%}.sort select{flex:1}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .body{padding:10px 12px 12px}.name{font-size:16px}.price{font-size:17px}
+  .buy{width:100%;justify-content:center;white-space:normal;text-align:center;line-height:1.2;padding:6px 10px}
+}
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="wrap">
+    <div>
+      <h1>Ryan's Christmas Wishlist</h1>
+      <p class="lede">Tap any picture or button to go straight to the store.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="art" aria-hidden="true">
+      <svg viewBox="0 0 500 400">
+        <defs>
+          <linearGradient id="gR" x1="0" x2="1"><stop offset="0" stop-color="#d22c3a"/><stop offset="1" stop-color="#951522"/></linearGradient>
+          <linearGradient id="gW" x1="0" x2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe6e1"/></linearGradient>
+          <linearGradient id="gG" x1="0" x2="1"><stop offset="0" stop-color="#f0c66e"/><stop offset="1" stop-color="#c8963a"/></linearGradient>
+          <linearGradient id="gT" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2f7a5b"/><stop offset="1" stop-color="#1b5a42"/></linearGradient>
+        </defs>
+        <g class="snow"></g>
+        <!-- tree -->
+        <polygon points="330,40 410,170 250,170" fill="url(#gT)"/>
+        <polygon points="330,100 430,250 230,250" fill="url(#gT)"/>
+        <polygon points="330,170 450,330 210,330" fill="url(#gT)"/>
+        <rect x="318" y="330" width="24" height="26" fill="#6b4226"/>
+        <polygon points="330,22 336,36 351,36 339,45 344,60 330,51 316,60 321,45 309,36 324,36" fill="#f0c66e"/>
+        <g fill="#e4b75c"><circle cx="300" cy="150" r="7"/><circle cx="365" cy="215" r="7"/><circle cx="280" cy="290" r="8"/><circle cx="395" cy="300" r="8"/></g>
+        <g fill="#d22c3a"><circle cx="352" cy="140" r="6"/><circle cx="290" cy="225" r="7"/><circle cx="340" cy="290" r="8"/></g>
+        <!-- ground -->
+        <ellipse cx="250" cy="372" rx="240" ry="22" fill="rgba(0,0,0,.22)"/>
+        <!-- big red gift -->
+        <rect x="70" y="240" width="170" height="130" rx="6" fill="url(#gR)"/>
+        <rect x="60" y="222" width="190" height="34" rx="6" fill="#e03a48"/>
+        <rect x="143" y="222" width="24" height="148" fill="url(#gG)"/>
+        <path d="M155 222c-30-38-70-28-56-6 8 12 34 9 56 6zM155 222c30-38 70-28 56-6-8 12-34 9-56 6z" fill="#f0c66e"/>
+        <!-- white gift -->
+        <rect x="200" y="298" width="110" height="72" rx="5" fill="url(#gW)"/>
+        <rect x="194" y="286" width="122" height="22" rx="5" fill="#ffffff"/>
+        <rect x="246" y="286" width="18" height="84" fill="#d22c3a"/>
+        <!-- gold gift -->
+        <rect x="370" y="310" width="90" height="60" rx="5" fill="url(#gG)"/>
+        <rect x="364" y="300" width="102" height="18" rx="5" fill="#f4d48f"/>
+        <rect x="407" y="300" width="16" height="70" fill="#0f3b2c"/>
+        <!-- tag -->
+        <g transform="rotate(-12 110 300)">
+          <path d="M84 286h56v34H84l-10-17z" fill="#f7f5ef"/>
+          <circle cx="86" cy="303" r="3.5" fill="#0f3b2c"/>
+          <text x="96" y="308" font-family="Young Serif, Georgia, serif" font-size="13" fill="#0f3b2c">Ryan</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sort and filter">
+  <div class="wrap">
+    <div class="chips" id="chips" role="group" aria-label="Category"></div>
+    <label class="sort" for="sort">Sort by
+      <select id="sort">
+        <option value="cat">Category</option>
+        <option value="low">Price: low to high</option>
+        <option value="high">Price: high to low</option>
+      </select>
+    </label>
+  </div>
+</nav>
+
+<main class="band" style="padding-top:0">
+  <div class="wrap">
+    <div class="grid" id="grid" aria-live="polite"></div>
+  </div>
+</main>
+
+<footer class="band">
+  <div class="wrap">
+    <p>Prices were checked on November 20, 2026 and are in Canadian dollars unless marked US$; stores change them often, so the store page has the final word. Where an item has a size, colour or bundle noted, that's the one I'm after.</p>
+  </div>
+</footer>
+
+<script>
+{
+const USD = 1.40; // rough rate, used only for sorting and the ≈ C$ hint
+const ITEMS = [{"id": "breadbox", "name": "Tower Bread Box (Steel)", "detail": "Yamazaki Home · colour: Black", "price": 205.0, "cur": "CAD", "cat": "Kitchen & Coffee", "url": "https://theyamazakihome.com/en-ca/products/tower-bread-box?variant=31351750164567"}, {"id": "homeview", "name": "Apple HomeView", "detail": "Apple · Space Grey", "price": 429.0, "cur": "CAD", "cat": "Tech", "url": "https://www.apple.com/ca/shop/buy-home/apple-homeview/apple-homeview-space-gray"}, {"id": "picpak", "name": "PicPak Mini E-Ink Album, 3-pack", "detail": "Pick the 3-Pack, one of each colour (black, blue, red)", "price": 179.0, "cur": "USD", "cat": "Tech", "url": "https://www.picpak.tech/products/pocket-size-e-ink-album"}, {"id": "stickerpix", "name": "Cricut StickerPix Print + Cut", "detail": "Powder Blue · Essential Bundle", "price": 349.0, "cur": "CAD", "cat": "Tech", "url": "https://cricut.com/en-ca/sticker-machines/cricut-stickerpix-print-cut/cricut-stickerpix-print-cut-powder-blue-essential-bundle/2013409.html"}, {"id": "yeti", "name": "YETI Yonder Water Bottle", "detail": "750 mL · colour: Charcoal", "price": 34.0, "cur": "CAD", "cat": "Bags & Gear", "url": "https://www.yeti.ca/drinkware/bottles/70000001099.html"}, {"id": "stonington", "name": "Stonington Daily Carry Tote", "detail": "L.L.Bean", "price": 162.0, "cur": "CAD", "cat": "Bags & Gear", "url": "https://www.llbean.ca/llb/shop/126027.html"}, {"id": "shirtjac", "name": "Men's Signature Jacquard Shirt Jac", "detail": "L.L.Bean · colour: Deep Rosewood · size: Large", "price": 245.0, "cur": "CAD", "cat": "Clothing", "url": "https://www.llbean.ca/llb/shop/5866802.html"}, {"id": "mariner", "name": "Men's Mariner Sweatshirt", "detail": "L.L.Bean · size: Large", "price": 145.0, "cur": "CAD", "cat": "Clothing", "url": "https://www.llbean.ca/llb/shop/5826649.html"}, {"id": "twill", "name": "Men's Signature Fisherman Twill Shirt", "detail": "L.L.Bean · colour: Thyme · size: Large", "price": 145.0, "cur": "CAD", "cat": "Clothing", "url": "https://www.llbean.ca/llb/shop/5866768.html"}, {"id": "blanket", "name": "Fleece Wearable Blanket with Sleeves", "detail": "YUGYVOB · Brown, Large", "price": 35.99, "cur": "CAD", "cat": "Clothing", "url": "https://www.amazon.ca/dp/B0FJFLHWND"}, {"id": "transformers", "name": "Transformers", "detail": "4K UHD + Blu-ray", "price": 35.88, "cur": "CAD", "cat": "Movies", "url": "https://www.amazon.ca/dp/B076BK4DFL"}, {"id": "horizon", "name": "Horizon Zero Dawn Remastered", "detail": "PS5", "price": 55.73, "cur": "CAD", "cat": "Video Games", "url": "https://www.amazon.ca/dp/B0DJ7W2WXV"}, {"id": "007", "name": "007 First Light – Specialist Edition", "detail": "PS5", "price": 89.99, "cur": "CAD", "cat": "Video Games", "url": "https://www.amazon.ca/dp/B0FBHCYKXX"}, {"id": "darkknight", "name": "The Dark Knight Trilogy", "detail": "4K UHD + Blu-ray", "price": 44.98, "cur": "CAD", "cat": "Movies", "url": "https://www.amazon.ca/dp/B0774D6HBB"}, {"id": "odyssey", "name": "The Odyssey (2026)", "detail": "4K UHD Blu-ray", "price": 34.99, "cur": "CAD", "cat": "Movies", "url": "https://www.amazon.ca/dp/B0HMXD5W7K"}, {"id": "twisters", "name": "Twisters Double Feature Steelbook", "detail": "4K UHD · Limited Edition", "price": 34.98, "cur": "CAD", "cat": "Movies", "url": "https://www.amazon.ca/dp/B0FG9TKT9J"}, {"id": "endgame", "name": "Avengers: Endgame", "detail": "4K UHD + Blu-ray + Digital", "price": 32.99, "cur": "CAD", "cat": "Movies", "url": "https://www.amazon.ca/dp/B07R4479C1"}, {"id": "infinitywar", "name": "Avengers: Infinity War", "detail": "4K UHD + Blu-ray + Digital (Bilingual)", "price": 34.99, "cur": "CAD", "cat": "Movies", "url": "https://www.amazon.ca/dp/B07CBLSGQX"}, {"id": "lotr", "name": "The Lord of the Rings Trilogy", "detail": "Extended & Theatrical · 4K UHD", "price": 69.06, "cur": "CAD", "cat": "Movies", "url": "https://www.amazon.ca/dp/B08KQBYM1Y"}, {"id": "df54", "name": "DF54 Single Dose Espresso Grinder", "detail": "Black", "price": 328.88, "cur": "CAD", "cat": "Kitchen & Coffee", "url": "https://www.amazon.ca/dp/B0DBD96WHL"}, {"id": "butterbell", "name": "Butter Bell Crock", "detail": "French ceramic butter keeper · blue trim", "price": 46.95, "cur": "CAD", "cat": "Kitchen & Coffee", "url": "https://www.amazon.ca/dp/B000FBL3IC"}, {"id": "patchwork", "name": "Patchwork", "detail": "10th Anniversary Edition · 2-player board game", "price": 54.99, "cur": "CAD", "cat": "Board Games", "url": "https://www.amazon.ca/dp/B0DK6ZZR94"}, {"id": "lotr-duel", "name": "The Lord of the Rings: Duel for Middle-earth", "detail": "2-player board game · Repos / Asmodee", "price": 27.62, "cur": "CAD", "cat": "Board Games", "url": "https://www.amazon.ca/dp/B0DFF3V1Q7"}, {"id": "agent-avenue", "name": "Agent Avenue", "detail": "2-player bluffing card game · Nerdlab Games", "price": 50.31, "cur": "CAD", "cat": "Board Games", "url": "https://www.amazon.ca/dp/B0FF2DFXTD"}];
+const store = u => { const h = new URL(u).hostname.replace(/^www\./,'');
+  return ({'amazon.ca':'Amazon.ca','llbean.ca':'L.L.Bean','apple.com':'Apple','cricut.com':'Cricut','yeti.ca':'YETI','picpak.tech':'PicPak','theyamazakihome.com':'Yamazaki Home'})[h] || h; };
+const cad = it => it.price == null ? null : (it.cur === 'USD' ? it.price * USD : it.price);
+const money = n => n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+ITEMS.forEach((it,i) => it.order = i);
+
+const cats = [...new Set(ITEMS.map(i => i.cat))].sort();
+let cat = 'All', sort = 'cat';
+try { const s = JSON.parse(localStorage.getItem('wish-view')||'{}'); if (s.cat && (s.cat==='All'||cats.includes(s.cat))) cat = s.cat; if (['cat','low','high'].includes(s.sort)) sort = s.sort; } catch(e) {}
+const save = () => { try { localStorage.setItem('wish-view', JSON.stringify({cat, sort})); } catch(e) {} };
+
+const priced = ITEMS.filter(i => i.price != null).map(cad);
+document.getElementById('stats').innerHTML =
+  `<span class="stat"><b>${ITEMS.length}</b> ideas</span>` +
+  `<span class="stat">From <b>$${Math.floor(Math.min(...priced))}</b> to <b>$${Math.ceil(Math.max(...priced))}</b></span>` +
+  `<span class="stat"><b>${cats.length}</b> categories</span>`;
+
+const chipsEl = document.getElementById('chips');
+const renderChips = () => {
+  chipsEl.innerHTML = ['All', ...cats].map(c => {
+    const n = c === 'All' ? ITEMS.length : ITEMS.filter(i => i.cat === c).length;
+    return `<button class="chip" type="button" data-cat="${esc(c)}" aria-pressed="${c===cat}">${esc(c)}<span>${n}</span></button>`;
+  }).join('');
+};
+
+const grid = document.getElementById('grid');
+const sel = document.getElementById('sort');
+sel.value = sort;
+const render = () => {
+  let list = ITEMS.filter(i => cat === 'All' || i.cat === cat);
+  const nullLast = (a,b,f) => (a.price==null) - (b.price==null) || f();
+  if (sort === 'low') list.sort((a,b) => nullLast(a,b,() => cad(a)-cad(b)));
+  else if (sort === 'high') list.sort((a,b) => nullLast(a,b,() => cad(b)-cad(a)));
+  else list.sort((a,b) => a.cat.localeCompare(b.cat) || nullLast(a,b,() => cad(a)-cad(b)));
+  grid.innerHTML = list.length ? list.map(it => {
+    const where = store(it.url);
+    const p = it.price == null
+      ? `<div class="price">See price<small>varies on Amazon</small></div>`
+      : it.cur === 'USD'
+        ? `<div class="price">US$${money(it.price)}<small>about C$${Math.round(it.price*USD)}</small></div>`
+        : `<div class="price">$${money(it.price)}</div>`;
+    return `<article class="card">
+      <a class="pic" href="${esc(it.url)}" target="_blank" rel="noopener" aria-label="${esc(it.name)} at ${esc(where)}"><img src="img/${esc(it.id)}.jpg" alt="${esc(it.name)}" loading="lazy" width="480" height="480"></a>
+      <div class="body">
+        <div class="cat">${esc(it.cat)}</div>
+        <h2 class="name">${esc(it.name)}</h2>
+        <p class="detail">${esc(it.detail)}</p>
+        <div class="foot">${p}<a class="buy" href="${esc(it.url)}" target="_blank" rel="noopener">Buy at ${esc(where)}</a></div>
+      </div>
+    </article>`;
+  }).join('') : `<p class="empty">Nothing in this category.</p>`;
+};
+
+chipsEl.addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; cat = b.dataset.cat; renderChips(); render(); save(); });
+sel.addEventListener('change', () => { sort = sel.value; render(); save(); });
+
+const snow = document.querySelector('.snow');
+snow.innerHTML = Array.from({length:34}, (_,i) => {
+  const x = (i*53)%500, y = (i*97)%380, r = 1.5 + (i%4)*0.8, d = 7 + (i%6)*2;
+  return `<circle cx="${x}" cy="${y-400}" r="${r}" style="animation-duration:${d}s;animation-delay:-${(i*1.3)%d}s"/>`;
+}).join('');
+
+renderChips(); render();
+}
+</script>
+</body>
+</html>
